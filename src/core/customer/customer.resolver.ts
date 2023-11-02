@@ -1,6 +1,5 @@
 import {
   Args,
-  Int,
   Mutation,
   Parent,
   Query,
@@ -13,18 +12,14 @@ import { CreateCustomerInput } from './graphQL/create-customer.input-type';
 import { GetCustomerArgs } from './graphQL/get-customer.args';
 import { UpdateCustomerArgs } from './graphQL/update-customer.args';
 import { Purchase } from '#src/core/purchase/graphQL/purchase.schema';
-import { PurchaseService } from '#src/core/purchase/purchase.service';
 
 @Resolver((of) => Customer)
 export class CustomerResolver {
-  constructor(
-    private readonly customerService: CustomerService,
-    private readonly purchaseService: PurchaseService,
-  ) {}
+  constructor(private readonly customerService: CustomerService) {}
 
   @Mutation((returns) => Customer)
   async createCustomer(@Args('Customer') customer: CreateCustomerInput) {
-    return await this.customerService.save(customer);
+    return await this.customerService.createCustomer(customer);
   }
 
   @Mutation((returns) => Customer)
@@ -59,8 +54,11 @@ export class CustomerResolver {
 
   @ResolveField('purchases', (returns) => [Purchase], { nullable: true })
   async resolvePurchases(@Parent() customer: Customer) {
-    return await this.purchaseService.find({
-      where: { customer: { ID: customer.ID } },
-    });
+    return (
+      await this.customerService.findOne({
+        where: customer,
+        relations: { purchases: true },
+      })
+    ).purchases;
   }
 }

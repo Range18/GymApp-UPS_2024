@@ -23,6 +23,6 @@ export class TrainingEntity {
   @Column({ nullable: false })
   price: number;
 
-  @Column({ nullable: false })
+  @Column({ type: 'varchar', nullable: false })
   type: string;
 }

@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import * as process from 'process';
@@ -9,6 +9,7 @@ import { databaseConfig } from './common/configs/database.config';
 import { CustomerModule } from './core/customer/customer.module';
 import { GymModule } from './core/gym/gym.module';
 import { PurchaseModule } from './core/purchase/purchase.module';
+import { formatError } from '#src/common/formatError.func';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { PurchaseModule } from './core/purchase/purchase.module';
       playground: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
+      formatError: (formattedError) => formatError(formattedError),
     }),
     TypeOrmModule.forRoot(databaseConfig),
     CustomerModule,

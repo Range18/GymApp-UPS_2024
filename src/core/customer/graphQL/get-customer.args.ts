@@ -1,6 +1,5 @@
 import { ArgsType, Field, InputType, Int } from '@nestjs/graphql';
-import { Customer } from './customer.schema';
-import { Purchase } from '../../purchase/graphQL/purchase.schema';
+import { IsEmail } from 'class-validator';
 
 @InputType('GetCustomerInput')
 @ArgsType()
@@ -11,6 +10,7 @@ export class GetCustomerArgs {
   @Field({ nullable: true })
   readonly name?: string;
 
+  @IsEmail()
   @Field({ nullable: true })
   readonly email?: string;
 }

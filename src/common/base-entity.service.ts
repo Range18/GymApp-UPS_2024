@@ -4,8 +4,6 @@ import {
   FindOneOptions,
   Repository,
 } from 'typeorm';
-import * as console from 'console';
-import * as assert from 'assert';
 import deepEqual from 'deep-equal';
 
 export abstract class BaseEntityService<Entity extends object> {
