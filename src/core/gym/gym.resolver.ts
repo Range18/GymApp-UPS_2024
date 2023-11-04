@@ -22,10 +22,9 @@ export class GymResolver {
     return await this.gymService.save(gym);
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Gym)
   async removeGym(@Args() gym: GetGymArgs) {
-    await this.gymService.removeOne({ where: gym });
-    return true;
+    return await this.gymService.removeOne({ where: gym });
   }
 
   @Mutation(() => Gym)
@@ -36,7 +35,7 @@ export class GymResolver {
         name: gym.name,
         adminName: gym.adminName,
         adminPhoneNumber: gym.adminPhoneNumber,
-        freeSlots: gym.freeSlots,
+        availableSlots: gym.availableSlots,
       },
     );
   }

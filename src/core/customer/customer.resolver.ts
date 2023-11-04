@@ -33,10 +33,9 @@ export class CustomerResolver {
     );
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Customer)
   async removeCustomer(@Args() customer: GetCustomerArgs) {
-    await this.customerService.removeOne({ where: customer });
-    return true;
+    return await this.customerService.removeOne({ where: customer });
   }
 
   @Query(() => Customer, { name: 'Customer', nullable: true })

@@ -13,7 +13,9 @@ export class PurchaseEntity {
   @PrimaryGeneratedColumn('increment')
   readonly ID: number;
 
-  @ManyToOne(() => CustomerEntity, (customer) => customer.purchases)
+  @ManyToOne(() => CustomerEntity, (customer) => customer.purchases, {
+    cascade: true,
+  })
   @JoinColumn({ name: 'customer' })
   customer: CustomerEntity;
 
@@ -23,7 +25,9 @@ export class PurchaseEntity {
   @Column({ nullable: false })
   price: number;
 
-  @ManyToOne(() => TrainingEntity, (training) => training.purchases)
+  @ManyToOne(() => TrainingEntity, (training) => training.purchases, {
+    cascade: true,
+  })
   @JoinColumn({ name: 'training' })
   training: TrainingEntity;
 }

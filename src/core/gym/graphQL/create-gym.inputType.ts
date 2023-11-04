@@ -12,5 +12,5 @@ export class CreateGymInput {
   readonly adminPhoneNumber: string;
 
   @Field(() => Int, { nullable: false })
-  readonly freeSlots: number;
+  readonly availableSlots: number;
 }

@@ -12,6 +12,8 @@ export class CustomerEntity {
   @Column({ nullable: false })
   name: string;
 
-  @OneToMany(() => PurchaseEntity, (purchase) => purchase.customer)
+  @OneToMany(() => PurchaseEntity, (purchase) => purchase.customer, {
+    onDelete: 'CASCADE',
+  })
   purchases?: PurchaseEntity[];
 }

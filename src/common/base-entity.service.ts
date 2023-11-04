@@ -5,21 +5,42 @@ import {
   Repository,
 } from 'typeorm';
 import deepEqual from 'deep-equal';
+import { GraphQLException } from '#src/common/exceptions/GraphQLException';
 
 export abstract class BaseEntityService<Entity extends object> {
   protected constructor(
     private readonly entityRepository: Repository<Entity>,
+    private readonly NotFoundException: GraphQLException<any>,
   ) {}
 
-  async find(options: FindManyOptions<Entity>): Promise<Entity[]> {
-    return await this.entityRepository.find(options);
+  async find(
+    options: FindManyOptions<Entity>,
+    throwError = true,
+  ): Promise<Entity[]> {
+    const entities = await this.entityRepository.find(options);
+
+    if (entities.length === 0 && throwError) {
+      throw this.NotFoundException;
+    }
+
+    return entities;
   }
 
-  async findOne(options: FindOneOptions<Entity>): Promise<Entity> {
+  async findOne(
+    options: FindOneOptions<Entity>,
+    throwError = true,
+  ): Promise<Entity> {
     if (options.where && deepEqual(options.where, {})) {
       throw new Error('Properties in the options.where must be defined');
     }
-    return await this.entityRepository.findOne(options);
+
+    const entity = await this.entityRepository.findOne(options);
+
+    if (!entity && throwError) {
+      throw this.NotFoundException;
+    }
+
+    return entity;
   }
 
   async save(entity: DeepPartial<Entity>): Promise<Entity>;
@@ -49,6 +70,10 @@ export abstract class BaseEntityService<Entity extends object> {
           )
         : (optionsOrEntities as Entity[]);
 
+    if (!entities) {
+      throw this.NotFoundException;
+    }
+
     await this.entityRepository.remove(entities);
   }
 
@@ -64,7 +89,15 @@ export abstract class BaseEntityService<Entity extends object> {
         ? await this.entityRepository.findOne(optionsOrEntity)
         : (optionsOrEntity as Entity);
 
-    return await this.entityRepository.remove(entity);
+    if (!entity) {
+      throw this.NotFoundException;
+    }
+
+    const entityToReturn = { ...entity };
+
+    await this.entityRepository.remove(entity);
+
+    return entityToReturn;
   }
 
   async updateOne(
@@ -79,6 +112,10 @@ export abstract class BaseEntityService<Entity extends object> {
       'where' in <object>optionsOrEntity
         ? await this.entityRepository.findOne(optionsOrEntity)
         : (optionsOrEntity as Entity);
+
+    if (!entity) {
+      throw this.NotFoundException;
+    }
 
     this.entityRepository.merge(entity, toUpdate);
 

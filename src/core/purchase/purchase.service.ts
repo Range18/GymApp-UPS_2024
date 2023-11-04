@@ -12,6 +12,7 @@ import { Exceptions } from '#src/common/exceptions/exception.types';
 import CustomerExceptions = Exceptions.CustomerExceptions;
 import TrainingExceptions = Exceptions.TrainingExceptions;
 import GymExceptions = Exceptions.GymExceptions;
+import PurchaseExceptions = Exceptions.PurchaseExceptions;
 
 @Injectable()
 export class PurchaseService extends BaseEntityService<PurchaseEntity> {
@@ -22,7 +23,14 @@ export class PurchaseService extends BaseEntityService<PurchaseEntity> {
     private readonly customerService: CustomerService,
     private readonly gymService: GymService,
   ) {
-    super(purchaseRepository);
+    super(
+      purchaseRepository,
+      new GraphQLException(
+        HttpStatus.NOT_FOUND,
+        'PurchaseExceptions',
+        PurchaseExceptions.NotFound,
+      ),
+    );
   }
 
   async purchaseTraining(
@@ -65,7 +73,7 @@ export class PurchaseService extends BaseEntityService<PurchaseEntity> {
       );
     }
 
-    if (gym.freeSlots < 1) {
+    if (gym.availableSlots < 1) {
       throw new GraphQLException(
         HttpStatus.BAD_REQUEST,
         'GymExceptions',
@@ -73,7 +81,7 @@ export class PurchaseService extends BaseEntityService<PurchaseEntity> {
       );
     }
 
-    gym.freeSlots -= 1;
+    gym.availableSlots -= 1;
     await this.gymService.save(gym);
 
     const purchase = await this.save({

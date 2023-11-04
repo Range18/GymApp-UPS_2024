@@ -12,7 +12,7 @@ export class UpdateGymArgs {
   readonly adminPhoneNumber?: string;
 
   @Field(() => Int, { nullable: true })
-  readonly freeSlots?: number;
+  readonly availableSlots?: number;
 
   @Field({ nullable: true })
   readonly name?: string;

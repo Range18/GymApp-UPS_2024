@@ -16,12 +16,11 @@ export class GymEntity {
   adminPhoneNumber: string;
 
   @Column({ nullable: false, default: 0 })
-  freeSlots: number;
-
-  //Todo GymIncome
+  availableSlots: number;
 
   @OneToMany(() => TrainingEntity, (training) => training.gym, {
     nullable: true,
+    onDelete: 'CASCADE',
   })
   trainings?: TrainingEntity[];
 }

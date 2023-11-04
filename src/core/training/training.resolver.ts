@@ -30,10 +30,9 @@ export class TrainingResolver {
     });
   }
 
-  @Mutation(() => Boolean)
+  @Mutation(() => Training)
   async removeTraining(@Args() training: GetTrainingArgs) {
-    await this.trainingService.removeOne({ where: training });
-    return true;
+    return await this.trainingService.removeOne({ where: training });
   }
 
   @Mutation(() => Training)

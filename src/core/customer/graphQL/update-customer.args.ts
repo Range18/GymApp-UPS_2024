@@ -1,5 +1,5 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
-import { IsEmail } from 'class-validator';
+import { IsEmail, IsOptional } from 'class-validator';
 
 @ArgsType()
 export class UpdateCustomerArgs {
@@ -10,6 +10,7 @@ export class UpdateCustomerArgs {
   readonly name?: string;
 
   @IsEmail()
+  @IsOptional()
   @Field({ nullable: true })
   readonly email?: string;
 }

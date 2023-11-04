@@ -10,7 +10,7 @@ export const databaseConfig: TypeOrmModuleOptions = {
   database: env.get('DB_NAME').required().asString(),
   username: env.get('DB_USER').required().asString(),
   password: env.get('DB_PASSWORD').required().asString(),
-  synchronize: false,
+  synchronize: env.get('DB_SYNC').default('true').asBool(),
   dropSchema: false,
   entities: ['dist/**/*.entity{.ts,.js}'],
   autoLoadEntities: true,

@@ -1,17 +1,14 @@
 import { Field, Float, InputType, Int } from '@nestjs/graphql';
-import { IsTypeOf } from '#src/common/decorators/IsTrainingType.decorator';
-import { IsPositive } from 'class-validator';
+import { TrainingType } from '#src/core/training/training.type';
 
 @InputType()
 export class CreateTraining {
   @Field(() => Int, { nullable: false })
   readonly gymId: number;
 
-  @IsPositive()
   @Field(() => Float, { nullable: false })
   readonly price: number;
 
-  @IsTypeOf('TrainingType')
-  @Field({ nullable: false })
-  readonly type: string;
+  @Field(() => TrainingType, { nullable: false })
+  readonly type: TrainingType;
 }

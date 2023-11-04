@@ -14,15 +14,25 @@ export class CustomerService extends BaseEntityService<CustomerEntity> {
     @InjectRepository(CustomerEntity)
     private readonly customerRepository: Repository<CustomerEntity>,
   ) {
-    super(customerRepository);
+    super(
+      customerRepository,
+      new GraphQLException(
+        HttpStatus.NOT_FOUND,
+        'CustomerExceptions',
+        CustomerExceptions.NotFound,
+      ),
+    );
   }
 
   async createCustomer(
     customerInput: CreateCustomerInput,
   ): Promise<CustomerEntity> {
-    const customer = await this.findOne({
-      where: { email: customerInput.email },
-    });
+    const customer = await this.findOne(
+      {
+        where: { email: customerInput.email },
+      },
+      false,
+    );
 
     if (customer) {
       throw new GraphQLException(

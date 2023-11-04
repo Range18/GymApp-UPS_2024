@@ -16,7 +16,7 @@ export class Gym {
   adminPhoneNumber: string;
 
   @Field(() => Int, { nullable: false })
-  freeSlots: number;
+  availableSlots: number;
 
   @Field(() => [Training], { nullable: true })
   trainings?: [Training];
