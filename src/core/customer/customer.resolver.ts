@@ -13,16 +13,16 @@ import { GetCustomerArgs } from './graphQL/get-customer.args';
 import { UpdateCustomerArgs } from './graphQL/update-customer.args';
 import { Purchase } from '#src/core/purchase/graphQL/purchase.schema';
 
-@Resolver((of) => Customer)
+@Resolver(() => Customer)
 export class CustomerResolver {
   constructor(private readonly customerService: CustomerService) {}
 
-  @Mutation((returns) => Customer)
+  @Mutation(() => Customer)
   async createCustomer(@Args('Customer') customer: CreateCustomerInput) {
     return await this.customerService.createCustomer(customer);
   }
 
-  @Mutation((returns) => Customer)
+  @Mutation(() => Customer)
   async updateCustomer(@Args() customer: UpdateCustomerArgs) {
     return await this.customerService.updateOne(
       { where: { ID: customer.ID } },
@@ -33,18 +33,18 @@ export class CustomerResolver {
     );
   }
 
-  @Mutation((returns) => Boolean)
+  @Mutation(() => Boolean)
   async removeCustomer(@Args() customer: GetCustomerArgs) {
     await this.customerService.removeOne({ where: customer });
     return true;
   }
 
-  @Query((returns) => Customer, { name: 'Customer', nullable: true })
+  @Query(() => Customer, { name: 'Customer', nullable: true })
   async getCustomer(@Args() customer: GetCustomerArgs) {
     return await this.customerService.findOne({ where: customer });
   }
 
-  @Query((returns) => [Customer], {
+  @Query(() => [Customer], {
     name: 'Customers',
     nullable: 'itemsAndList',
   })
@@ -52,7 +52,7 @@ export class CustomerResolver {
     return await this.customerService.find({ where: customers });
   }
 
-  @ResolveField('purchases', (returns) => [Purchase], { nullable: true })
+  @ResolveField('purchases', () => [Purchase], { nullable: true })
   async resolvePurchases(@Parent() customer: Customer) {
     return (
       await this.customerService.findOne({

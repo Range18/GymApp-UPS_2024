@@ -1,5 +1,4 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
-import { Gym } from '#src/core/gym/graphQL/gym.schema';
 
 @ArgsType()
 export class UpdateGymArgs {

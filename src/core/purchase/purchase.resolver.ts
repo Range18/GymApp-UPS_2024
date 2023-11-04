@@ -13,24 +13,23 @@ import { GetPurchaseArgs } from '#src/core/purchase/graphQL/get-purchase.args';
 import { CreatePurchaseInputType } from '#src/core/purchase/graphQL/create-purchase.inputType';
 import { Customer } from '#src/core/customer/graphQL/customer.schema';
 import { Training } from '#src/core/training/graphQL/training.schema';
-import * as console from 'console';
 
-@Resolver((of) => Purchase)
+@Resolver(() => Purchase)
 export class PurchaseResolver {
   constructor(private readonly purchaseService: PurchaseService) {}
-  @Mutation((returns) => Purchase, { name: 'purchaseTraining' })
+  @Mutation(() => Purchase, { name: 'purchaseTraining' })
   async purchaseTraining(
     @Args('PurchaseInput') purchaseInput: CreatePurchaseInputType,
   ) {
     return await this.purchaseService.purchaseTraining(purchaseInput);
   }
 
-  @Query((returns) => Purchase, { name: 'Purchase', nullable: true })
+  @Query(() => Purchase, { name: 'Purchase', nullable: true })
   async getPurchase(@Args() purchase: GetPurchaseArgs) {
     return await this.purchaseService.findOne({ where: purchase });
   }
 
-  @Query((returns) => [Purchase], {
+  @Query(() => [Purchase], {
     name: 'Purchases',
     nullable: 'itemsAndList',
   })
@@ -43,12 +42,12 @@ export class PurchaseResolver {
     });
   }
 
-  @Query((returns) => [Purchase], { nullable: 'itemsAndList' })
+  @Query(() => [Purchase], { nullable: 'itemsAndList' })
   async getAllPurchases(@Args() purchases: GetPurchaseArgs) {
     return await this.purchaseService.find({ where: purchases });
   }
 
-  @ResolveField('customer', (returns) => Customer)
+  @ResolveField('customer', () => Customer)
   async getCustomer(@Parent() purchase: Purchase) {
     return (
       await this.purchaseService.findOne({
@@ -58,7 +57,7 @@ export class PurchaseResolver {
     ).customer;
   }
 
-  @ResolveField('training', (returns) => Training)
+  @ResolveField('training', () => Training)
   async getTraining(@Parent() purchase: Purchase) {
     return (
       await this.purchaseService.findOne({

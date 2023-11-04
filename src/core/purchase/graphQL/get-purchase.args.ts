@@ -1,5 +1,4 @@
 import { ArgsType, Field } from '@nestjs/graphql';
-import { Purchase } from '#src/core/purchase/graphQL/purchase.schema';
 import { GetCustomerArgs } from '#src/core/customer/graphQL/get-customer.args';
 import { GetTrainingArgs } from '#src/core/training/graphQL/get-training.args';
 

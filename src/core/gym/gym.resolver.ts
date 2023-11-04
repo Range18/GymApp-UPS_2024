@@ -13,22 +13,22 @@ import { UpdateGymArgs } from '#src/core/gym/graphQL/update-gym.args';
 import { Training } from '#src/core/training/graphQL/training.schema';
 import { GetGymArgs } from '#src/core/gym/graphQL/get-gym.args';
 
-@Resolver((of) => Gym)
+@Resolver(() => Gym)
 export class GymResolver {
   constructor(private readonly gymService: GymService) {}
 
-  @Mutation((returns) => Gym)
+  @Mutation(() => Gym)
   async createGym(@Args('GymInput') gym: CreateGymInput) {
     return await this.gymService.save(gym);
   }
 
-  @Mutation((returns) => Boolean)
+  @Mutation(() => Boolean)
   async removeGym(@Args() gym: GetGymArgs) {
     await this.gymService.removeOne({ where: gym });
     return true;
   }
 
-  @Mutation((returns) => Gym)
+  @Mutation(() => Gym)
   async updateGym(@Args() gym: UpdateGymArgs) {
     return await this.gymService.updateOne(
       { where: { ID: gym.ID } },
@@ -41,17 +41,17 @@ export class GymResolver {
     );
   }
 
-  @Query((returns) => Gym, { name: 'Gym', nullable: true })
+  @Query(() => Gym, { name: 'Gym', nullable: true })
   async getGym(@Args() gym: GetGymArgs) {
     return await this.gymService.findOne({ where: gym });
   }
 
-  @Query((returns) => [Gym], { name: 'Gyms', nullable: true })
+  @Query(() => [Gym], { name: 'Gyms', nullable: true })
   async getGyms(@Args() gyms: GetGymArgs) {
     return await this.gymService.find({ where: gyms });
   }
 
-  @ResolveField('trainings', (returns) => [Training], { nullable: true })
+  @ResolveField('trainings', () => [Training], { nullable: true })
   async getTrainings(@Parent() gym: Gym) {
     return (
       await this.gymService.findOne({

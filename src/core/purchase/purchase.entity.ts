@@ -5,7 +5,6 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Purchase } from './graphQL/purchase.schema';
 import { TrainingEntity } from '../training/training.entity';
 import { CustomerEntity } from '../customer/customer.entity';
 

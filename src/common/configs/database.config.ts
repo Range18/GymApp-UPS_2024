@@ -1,14 +1,19 @@
-import { get } from 'env-var';
+import env from 'env-var';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import 'dotenv/config';
+import { DataSource, DataSourceOptions } from 'typeorm';
+
 export const databaseConfig: TypeOrmModuleOptions = {
-  port: get('DB_PORT').required().asPortNumber(),
-  host: get('DB_HOST').default('localhost').asString(),
-  database: get('DB_NAME').required().asString(),
-  username: get('DB_USER').required().asString(),
-  password: get('DB_PASSWORD').required().asString(),
-  synchronize: get('DB_SYNC').default('false').asBool(),
-  dropSchema: get('DB_DROP').default('false').asBool(),
-  autoLoadEntities: true,
   type: 'postgres',
+  port: env.get('DB_PORT').required().asPortNumber(),
+  host: env.get('DB_HOST').default('localhost').asString(),
+  database: env.get('DB_NAME').required().asString(),
+  username: env.get('DB_USER').required().asString(),
+  password: env.get('DB_PASSWORD').required().asString(),
+  synchronize: false,
+  dropSchema: false,
+  entities: ['dist/**/*.entity{.ts,.js}'],
+  autoLoadEntities: true,
 };
+
+export const dataSource = new DataSource(databaseConfig as DataSourceOptions);
