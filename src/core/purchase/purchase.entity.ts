@@ -14,7 +14,7 @@ export class PurchaseEntity {
   readonly ID: number;
 
   @ManyToOne(() => CustomerEntity, (customer) => customer.purchases, {
-    cascade: true,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'customer' })
   customer: CustomerEntity;
@@ -26,7 +26,7 @@ export class PurchaseEntity {
   price: number;
 
   @ManyToOne(() => TrainingEntity, (training) => training.purchases, {
-    cascade: true,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'training' })
   training: TrainingEntity;

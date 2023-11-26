@@ -15,7 +15,7 @@ export class TrainingEntity {
   @PrimaryGeneratedColumn('increment')
   readonly ID: number;
 
-  @ManyToOne(() => GymEntity, (gym) => gym.trainings, { cascade: true })
+  @ManyToOne(() => GymEntity, (gym) => gym.trainings, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'gym' })
   gym: GymEntity;
 
